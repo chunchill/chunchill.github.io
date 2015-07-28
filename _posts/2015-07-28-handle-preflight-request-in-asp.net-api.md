@@ -2,7 +2,8 @@
 layout: post
 title:  "how to handle preflight request in asp.net web api"
 date:   2015-07-28 15:22:15
-categories: .NET-WEB-API
+categories: [.NET,C#,HTTP]
+tags:[Restful,WebApi]
 ---
 
 # What is preflight request? #
