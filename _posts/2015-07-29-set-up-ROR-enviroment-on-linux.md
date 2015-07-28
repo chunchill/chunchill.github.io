@@ -70,6 +70,7 @@ Do the follwing changes in the configuration file:
 	
 		#Allow anonymous FTP?(Disable by default)
 		annoymous_enable=NO
+
 You could also set the ftpd_banner in the configuration file,and modify the welcome messages.
 
 - enbale the writeable permission
