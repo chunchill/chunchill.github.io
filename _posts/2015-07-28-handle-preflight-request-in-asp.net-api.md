@@ -170,7 +170,8 @@ Now, I have a requirement that I need upload a image file to the server with the
 
 1.   Add logic in Application_BeginRequest in Global.asax.cs
 
-	    protected void Application_BeginRequest()
+ 	    
+		protected void Application_BeginRequest()
 	    {
 		    if (Request.Headers.AllKeys.Contains("Origin") && Request.HttpMethod == "OPTIONS")
 		    {
@@ -181,7 +182,8 @@ Now, I have a requirement that I need upload a image file to the server with the
 
 1. BWT, the CROS related config in the web.config is like this.
 
-    	</system.web>
+    	
+		</system.web>
     	  <system.webServer>
 	    	<httpProtocol>
 	    	  <customHeaders>
