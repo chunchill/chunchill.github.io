@@ -7,6 +7,8 @@ tags:  [Rails]
 ---
 
 All of the setups are in Ubuntu Linux
+
+
 # - Install SSHD
 
 
