@@ -171,13 +171,14 @@ Now, I have a requirement that I need upload a image file to the server with the
 1.   Add logic in Application_BeginRequest in Global.asax.cs
 
  	    
-		protected void Application_BeginRequest()
-	    {
-		    if (Request.Headers.AllKeys.Contains("Origin") && Request.HttpMethod == "OPTIONS")
+			protected void Application_BeginRequest()
 		    {
-		   		 Response.Flush();
+			    if (Request.Headers.AllKeys.Contains("Origin") && Request.HttpMethod == "OPTIONS")
+			    {
+			   		 Response.Flush();
+			    }
 		    }
-	    }
+
 
 
 1. BWT, the CROS related config in the web.config is like this.
