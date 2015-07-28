@@ -118,7 +118,7 @@ Lines 15 - 27 above are the response that the server sends back indicating that 
 
 The server responds with Access-Control-Allow-Methods and says that POST, GET, and OPTIONS are viable methods to query the resource in question.  Note that this header is similar to the HTTP/1.1 Allow: response header, but used strictly within the context of access control.  The server also sends Access-Control-Allow-Headers with X-PINGOTHER as its value, confirming that this is a permitted header to be used with the actual request.  Like Access-Control-Allow-Methods, Access-Control-Allow-Headers is a comma separated list of acceptable headers.  Finally, Access-Control-Max-Age gives the value in seconds for how long the response to the preflight request can be cached for without sending another preflight request.  In this case, 1728000 seconds is 20 days.
 
-# A Demo in Asp.net web API? #
+# A Demo in Asp.net web API #
 
 Now, I have a requirement that I need upload a image file to the server with the Asp.net web api. in this case, it should be a post method and the content type should image/*,so refer to the preflight request's definition, if POST is used to send request data with a Content-Type other than application/x-www-form-urlencoded, multipart/form-data, or text/plain, it would be a preflight request.
 
@@ -170,23 +170,23 @@ Now, I have a requirement that I need upload a image file to the server with the
 
 1.   Add logic in Application_BeginRequest in Global.asax.cs
 
- 		protected void Application_BeginRequest()
-        {
-            if (Request.Headers.AllKeys.Contains("Origin") && Request.HttpMethod == "OPTIONS")
-            {
-                Response.Flush();
-            }
-        }
+	    protected void Application_BeginRequest()
+	    {
+		    if (Request.Headers.AllKeys.Contains("Origin") && Request.HttpMethod == "OPTIONS")
+		    {
+		   		 Response.Flush();
+		    }
+	    }
 
 
 1. BWT, the CROS related config in the web.config is like this.
 
     	</system.web>
     	  <system.webServer>
-    	<httpProtocol>
-    	  <customHeaders>
-    	<add name="Access-Control-Allow-Origin" value="*" />
-    	<add name="Access-Control-Allow-Headers" value="accept, cache-control, content-type, x-requested-with" />
-    	<add name="Access-Control-Allow-Methods" value="GET, POST, PUT, DELETE, OPTIONS" />
-    	  </customHeaders>
-    	</httpProtocol>
+	    	<httpProtocol>
+	    	  <customHeaders>
+		    	<add name="Access-Control-Allow-Origin" value="*" />
+		    	<add name="Access-Control-Allow-Headers" value="accept, cache-control, content-type, x-requested-with" />
+		    	<add name="Access-Control-Allow-Methods" value="GET, POST, PUT, DELETE, OPTIONS" />
+	    	  </customHeaders>
+	    	</httpProtocol>
