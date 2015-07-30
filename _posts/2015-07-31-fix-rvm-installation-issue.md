@@ -31,3 +31,5 @@ You also need to run
 	Jasper-PC$ rvm requirements 
 
 to see dependency requirements for your operating system
+
+Please Also Refer to :[https://rvm.io/integration/gnome-terminal](https://rvm.io/integration/gnome-terminal "https://rvm.io/integration/gnome-terminal") 
