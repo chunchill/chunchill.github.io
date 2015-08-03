@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "RVM is not a function"
+title:  "why bundle exec rake db:migrate"
 date:   2015-08-01 15:22:15
 categories:  [Ruby]
 tags:  [Ruby]
