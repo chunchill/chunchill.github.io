@@ -49,8 +49,8 @@ OR you could use the steps 7 to create the user.
 
 - Step 8: Create database whose owner is dbuser:
 
-	CREATE DATABASE exampledb OWNER dbuser;
-	GRANT ALL PRIVILEGES ON DATABASE exampledb to dbuser;
+		CREATE DATABASE exampledb OWNER dbuser;
+		GRANT ALL PRIVILEGES ON DATABASE exampledb to dbuser;
 
 - Step 9: quit
 	
