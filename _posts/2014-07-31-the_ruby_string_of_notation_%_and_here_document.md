@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "The % Notation of ruby"
+title:  "The Ruby string of Notation % and Here Document"
 date:   2014-07-31 23:22:15
 categories:  [Ruby]
 tags:  [Ruby]
@@ -8,7 +8,7 @@ tags:  [Ruby]
 
 
 
-# The Ruby string of Notation % and Here Document
+# Notation % 
 
 
 There is also a Perl-inspired way to quote strings: by using % (percent character) and specifying a delimiting character, for example:
