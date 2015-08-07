@@ -15,6 +15,7 @@ we always use wget to grab files from web servers,it is really useful tool for c
 - Anyway,the simplest way to use wget is as follows:
 
 		$ wget http://myserver.com/path/to/file.txt
+
 It simply connects to the http server on myserver.com and downloads the file file.txt
 
 - But what will happen if the connection is slow, and the file is lengthy? The connection will probably fail before the whole file is retrieved, more than once. In this case, Wget will try getting the file until it either gets the whole of it, or exceeds the default number of retries (this being 20). It is easy to change the number of tries to 45, to insure that the whole file will arrive safely:
