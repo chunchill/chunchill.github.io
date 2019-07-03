@@ -1,533 +1,517 @@
 <html>
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" /> 
-<link type="text/css" href="yangshi.css" rel="stylesheet" />
-<script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <link type="text/css" href="yangshi.css" rel="stylesheet" />
+    <script>
+        //介绍：起名页面，基于三才五格法
+        //*增加中间的字x定制笔画
+        var g_xingNum = 0; //姓笔画数
+        var g_midword = 0; //中字笔画数
 
-//介绍：起名页面，基于三才五格法
-//*增加中间的字x定制笔画
+        var g_jingJian = ""; //是否低要求输出
+        var g_man = "";
+        var g_woman = "";
 
-var g_xingNum = 0; //姓笔画数
-var g_midword = 0; //中字笔画数
+        //吉祥数
+        var goodNum = new Array(1, 3, 5, 7, 8, 11, 13, 15, 16, 18,
+            21, 23, 24, 25, 31, 32, 33, 35, 37,
+            39, 41, 45, 47, 48, 52, 57, 61, 63,
+            65, 67, 68, 81);
 
-var g_jingJian = "";  //是否低要求输出
-var g_man = "";
-var g_woman = "";
-
-//吉祥数
-var goodNum = new Array(1, 3 , 5, 7, 8, 11, 13, 15, 16, 18, 
-                        21, 23, 24, 25, 31, 32, 33, 35, 37,
-						39, 41, 45, 47, 48, 52, 57, 61, 63,
-						65, 67, 68, 81);
-
-//次吉祥数
-var cijixiangNum = new Array(6, 17, 26, 27, 29, 30, 38, 49, 51, 55, 58, 71, 73, 75);
+        //次吉祥数
+        var cijixiangNum = new Array(6, 17, 26, 27, 29, 30, 38, 49, 51, 55, 58, 71, 73, 75);
 
 
 
-//女性的取用数
-var womanNum = new Array(1, 3, 5, 6, 7, 8, 11, 13, 15, 16, 17, 18, 24, 25, 27, 
-                          30, 31, 32,  35, 37, 38,  41, 45, 47, 48, 49, 51, 52, 
-						 55, 57, 58, 61, 63, 65, 67, 68, 71, 73, 75, 81);
+        //女性的取用数
+        var womanNum = new Array(1, 3, 5, 6, 7, 8, 11, 13, 15, 16, 17, 18, 24, 25, 27,
+            30, 31, 32, 35, 37, 38, 41, 45, 47, 48, 49, 51, 52,
+            55, 57, 58, 61, 63, 65, 67, 68, 71, 73, 75, 81);
 
-//女性的最优数
-var womanNumComNum = new Array(1, 3, 5, 7, 8, 11, 13, 15, 16, 18,
-                               24, 25, 31, 32, 35, 37, 41, 45, 47, 
-							   48, 52, 57, 61, 63, 65, 67, 68, 81);
+        //女性的最优数
+        var womanNumComNum = new Array(1, 3, 5, 7, 8, 11, 13, 15, 16, 18,
+            24, 25, 31, 32, 35, 37, 41, 45, 47,
+            48, 52, 57, 61, 63, 65, 67, 68, 81);
 
-//凶数
-var nogoodNum = new Array(2, 4, 9, 10, 12, 14, 19, 20, 22, 28,
-                          34, 36, 40, 42, 43, 44, 46, 50, 53, 54, 
-						  56, 59, 60, 62, 64, 66, 69, 70, 72, 74,
-						  76, 77, 78, 79, 80);
+        //凶数
+        var nogoodNum = new Array(2, 4, 9, 10, 12, 14, 19, 20, 22, 28,
+            34, 36, 40, 42, 43, 44, 46, 50, 53, 54,
+            56, 59, 60, 62, 64, 66, 69, 70, 72, 74,
+            76, 77, 78, 79, 80);
 
-//大吉三才表
-var BigGood = new Array("木木木", "木木火", "木木土", "木火木", "木火土", "木水木", "木水金", "木水水", 
-                        "火木木", "火木火", "火木土", "火火木", "火火土", "火土火", "火土土", "火土金", 
-						"土火木", "土火火", "土火土", "土土火", "土土土", "土土金", "土金土", "土金金", "土金水", 
-						"金土火", "金土土", "金土金", "金金土", "金水木", "金水金", 
-						"水木木", "水木火", "水木土", "水木水", "水金土", "水金水", "水水木", "水水金");
+        //大吉三才表
+        var BigGood = new Array("木木木", "木木火", "木木土", "木火木", "木火土", "木水木", "木水金", "木水水",
+            "火木木", "火木火", "火木土", "火火木", "火火土", "火土火", "火土土", "火土金",
+            "土火木", "土火火", "土火土", "土土火", "土土土", "土土金", "土金土", "土金金", "土金水",
+            "金土火", "金土土", "金土金", "金金土", "金水木", "金水金",
+            "水木木", "水木火", "水木土", "水木水", "水金土", "水金水", "水水木", "水水金");
 
-var MidGood = new Array("木火火", "木土火", "火木水", "火火火", "土木木", "土木火", "土土木", "金土木", 
-                        "金金金", "金金水", "金水水", "水火木", "水土火", "水土土", "水土金", "水金金", "水水水");
+        var MidGood = new Array("木火火", "木土火", "火木水", "火火火", "土木木", "土木火", "土土木", "金土木",
+            "金金金", "金金水", "金水水", "水火木", "水土火", "水土土", "水土金", "水金金", "水水水");
 
-//吉 木土土，金水土
+        //吉 木土土，金水土
 
-//三才五格五行数
-// 12 木
-// 34 火
-// 56 土
-// 78 金
-// 910 水
-
-
-//判断某数是否在某数组内, 吉祥数、次吉祥数等
-function checkGoodNum(x, nary)
-{
-	//document.write(x);
-	for(var i=0;i<nary.length;i++){
-		//document.write(nary[i]+"&nbsp;");
-		if(x == nary[i]){
-		     
-			 return true;
-		}
-	}
-    
-	
-   return false;
-}
-
-//根据五行数返回五行颜色
-function getWuXingColor(nary)
-{
-    var skyColor = get3CaiWuXing(nary); 
-	var size = "5";
-	 var skyCol = "<font color='#000000'>";
-	   if(skyColor == "水")
-		  skyCol = "<font color='#87CEFF' size='"+size+"'>";
-	   else
-	   if(skyColor == "木")
-		  skyCol = "<font color='#7CFC00' size='"+size+"'>";
-	   else
-	   if(skyColor == "火")
-		  skyCol = "<font color='#ff0000' size='"+size+"'>";
-	   else
-	   if(skyColor == "土")
-		  skyCol = "<font color='#CD853F' size='"+size+"'>";
-	   else
-	   if(skyColor == "金")
-		  skyCol = "<font color='#FFC125' size='"+size+"'>";
-	   else
-	      skyCol = "<font color='#000000' size='"+size+"'>";
-    return skyCol;
-}
+        //三才五格五行数
+        // 12 木
+        // 34 火
+        // 56 土
+        // 78 金
+        // 910 水
 
 
-//判断阴阳数
-function calcYinYangNum(nary)
-{
-	var t = nary % 10;
-	if(t == 1 || t == 3 || t == 5 || t == 7 || t == 9)
-	   return "阳";
-	else
-	if(t == 2 || t == 4 || t == 6 || t == 8 || t == 0)
-	   return "阴";
-	else
-	if(t < 0)
-	  return "计算错误 function calcYinYangNum(nary)";
-	return "计算错误 function calcYinYangNum(nary)";
-}
+        //判断某数是否在某数组内, 吉祥数、次吉祥数等
+        function checkGoodNum(x, nary) {
+            //document.write(x);
+            for (var i = 0; i < nary.length; i++) {
+                //document.write(nary[i]+"&nbsp;");
+                if (x == nary[i]) {
 
-//计算是否斜体
-function calcXieTi(nary)
-{
-   var xieTi = calcYinYangNum(nary);
-   var xieB = " ";
-   if(xieTi == "阴")
-	  xieB = "<i>";
-   else
-	  xieB = "<b>";
-   return xieB;
-}
-
-//判断是否在大吉数组内
-//tcai - 输出的三才，木火土、金水水等
-function checkIsNotInBigGood(nary, tcai)
-{
-	for(var i=0;i<nary.length;i++)
-	{
-		if(nary[i] == tcai)
-		   return true;
-	}
-	return false;
-}
-
-//判断是否在中吉数组内
-//tcai - 三才，土火金类似的。
-function checkIsNotInMidGood(nary, tcai)
-{
-	for(var i=0;i<nary.length;i++)
-	{
-		if(nary[i] == tcai)
-		   return true;
-	}
-	return false;
-}
-
-//男的2
-//nary - 吉祥数、次吉祥数数组
-function showMan2Function(nary)
-{
-	var MAXI = 30;
-	document.write("<table border='1'>");
-	var hang = 0;
-	for(var x=1;x<=MAXI;x++){
-		//document.write("x=" + x + "<br>");
-		document.write("<tr>");
-		
-		for(var y=1;y<=MAXI;y++){
-            
-			
-			//人格 = 姓+x
-			//外格 = y + 1
-			//地格 = x + y
-			//总格 = x+y+姓
-			var personGe = g_xingNum + x;
-			var outGe = y + 1;
-			var earthGe = x + y;
-			var allGe = x + y + g_xingNum;
-            
-            if(g_jingJian){
-				if(checkGoodNum(personGe, nary) && 				   
-				   checkGoodNum(earthGe, nary)
-				   ){
-				   
-				   //天格五行，根据五行改变颜色
-				   //var skyColor = get3CaiWuXing(g_xingNum+1); 
-				   var skyCol = getWuXingColor(g_xingNum+1);
-				   var peopleCol = getWuXingColor(personGe);
-				   var earthCol = getWuXingColor(earthGe);
-				  
-				   
-				   //判断阴阳，若阴则斜体显示
-				   var xieB = calcXieTi(g_xingNum+1);
-				   var pXieB = calcXieTi(personGe);
-				   var eXieB = calcXieTi(earthGe);
-				   
-				   //判断三才配置
-				   var threeCaiFlag = get3CaiWuXing(g_xingNum+1) + get3CaiWuXing(personGe) + get3CaiWuXing(earthGe);
-				   var threeCaiOut = "  ";
-				   if(checkIsNotInBigGood(BigGood, threeCaiFlag))
-					  threeCaiOut = "大吉";
-				   else{
-					  threeCaiOut = " ";
-					  if(checkIsNotInMidGood(MidGood, threeCaiFlag))
-						threeCaiOut = "中吉";
-					  else{
-						threeCaiOut = " ";
-
-						if(threeCaiFlag == "木土土" || threeCaiFlag == "金水土")
-						   threeCaiOut = "吉";
-						else
-						   threeCaiOut = " ";
-					  }
-				   }
-
-				   
-				  
-
-				  document.write("<td width='73'>x = " + x + "</td><td width='73'>y = "+y +
-								 " </td><td width='120'>" +xieB+"天格: "+(g_xingNum+1)+ " "+ skyCol + 
-																	 get3CaiWuXing(g_xingNum+1)+"</font>" +
-								 " </td><td width='120'>" +pXieB+"人格: "+personGe+ " "+ peopleCol + 
-																	 get3CaiWuXing(personGe) + "</font>" + 
-								 " <td width='120'>"+eXieB+"地格: " + earthGe + " " + earthCol + 
-																	 get3CaiWuXing(earthGe) + "</font>" + 
-								 " <td width='60'>" +threeCaiOut+ "</td>" + 
-								 " </td><td width='90' class='outge'>外格: "+ 
-								+ outGe + " </td><td width='90'>总格: "+allGe + " " + get3CaiWuXing(allGe)+"</td></tr>");
-				  //document.write("</td>");
-				}
-			}
-            else{
-				if(checkGoodNum(personGe, nary) && 
-				   checkGoodNum(outGe, nary) && 
-				   checkGoodNum(earthGe, nary) &&
-				   checkGoodNum(allGe, nary)){
-				   
-				   //天格五行，根据五行改变颜色
-				   //var skyColor = get3CaiWuXing(g_xingNum+1); 
-				   var skyCol = getWuXingColor(g_xingNum+1);
-				   var peopleCol = getWuXingColor(personGe);
-				   var earthCol = getWuXingColor(earthGe);
-				  
-				   
-				   //判断阴阳，若阴则斜体显示
-				   var xieB = calcXieTi(g_xingNum+1);
-				   var pXieB = calcXieTi(personGe);
-				   var eXieB = calcXieTi(earthGe);
-				   
-				   //判断三才配置
-				   var threeCaiFlag = get3CaiWuXing(g_xingNum+1) + get3CaiWuXing(personGe) + get3CaiWuXing(earthGe);
-				   var threeCaiOut = "  ";
-				   if(checkIsNotInBigGood(BigGood, threeCaiFlag))
-					  threeCaiOut = "大吉";
-				   else{
-					  threeCaiOut = " ";
-					  if(checkIsNotInMidGood(MidGood, threeCaiFlag))
-						threeCaiOut = "中吉";
-					  else{
-						threeCaiOut = " ";
-
-						if(threeCaiFlag == "木土土" || threeCaiFlag == "金水土")
-						   threeCaiOut = "吉";
-						else
-						   threeCaiOut = " ";
-					  }
-				   }
-
-				   
-				  
-
-				  document.write("<td width='73'>x = " + x + "</td><td width='73'>y = "+y +
-								 " </td><td width='120'>" +xieB+"天格: "+(g_xingNum+1)+ " "+ skyCol + 
-																	 get3CaiWuXing(g_xingNum+1)+"</font>" +
-								 " </td><td width='120'>" +pXieB+"人格: "+personGe+ " "+ peopleCol + 
-																	 get3CaiWuXing(personGe) + "</font>" + 
-								 " <td width='120'>"+eXieB+"地格: " + earthGe + " " + earthCol + 
-																	 get3CaiWuXing(earthGe) + "</font>" + 
-								 " <td width='60'>" +threeCaiOut+ "</td>" + 
-								 " </td><td width='90' class='outge'>外格: "+ 
-								+ outGe + " </td><td width='90'>总格: "+allGe + " " + get3CaiWuXing(allGe)+"</td></tr>");
-				  //document.write("</td>");
-				}
-
-				
-			}
-
-			//document.write("<br>");
-		}
-	}
-		document.write("</table>");
-} // end function
-
-//中间字定制版
-//nary - 数组
-//nx - 定制中字的笔画数
-function showMidwordFunction(nx, nary){
-	var MAXI = 30;
-	   //document.write(nx);
-		//document.write("x=" + x + "<br>");
-        document.write("<table border='1'>");
-	   for(var y=1;y<=MAXI;y++){
-           
-		   document.write("<tr>");
-
-		   var personGe = g_xingNum + nx;  //人格 = 姓氏 + nx
-			var outGe = y + 1;
-			var earthGe = nx + y;
-			var allGe = nx + y + g_xingNum;
-
-			//document.write(personGe + "<br>");
-
-//		    checkGoodNum(personGe, nary) &&
-			
-			if( 
-			   checkGoodNum(outGe, nary) && 
-			   checkGoodNum(earthGe, nary) &&
-			   checkGoodNum(allGe, nary)){
-			   
-			    var skyCol = getWuXingColor(g_xingNum+1);
-			   var peopleCol = getWuXingColor(personGe);
-			   var earthCol = getWuXingColor(earthGe);
-               
-			   //判断阴阳，若阴则斜体显示
-			   var xieB = calcXieTi(g_xingNum+1);
-               var pXieB = calcXieTi(personGe);
-               var eXieB = calcXieTi(earthGe);
-               
-			   //判断三才配置
-			   var threeCaiFlag = get3CaiWuXing(g_xingNum+1) + get3CaiWuXing(personGe) + get3CaiWuXing(earthGe);
-			   var threeCaiOut = "  ";
-			   if(checkIsNotInBigGood(BigGood, threeCaiFlag))
-			      threeCaiOut = "大吉";
-			   else{
-			      threeCaiOut = " ";
-				  if(checkIsNotInMidGood(MidGood, threeCaiFlag))
-					threeCaiOut = "中吉";
-				  else
-					threeCaiOut = " ";
-			   }           
-
-			   document.write("<td width='73'>y = "+y +
-			                 " </td><td width='120'>" +xieB+"天格: "+(g_xingNum+1)+ " "+ skyCol + 
-							                                      get3CaiWuXing(g_xingNum+1)+
-			                 " </td><td width='120'>" +pXieB+"人格: "+personGe+ " " + peopleCol + 
-							                                      get3CaiWuXing(personGe) + 
-							 " <td width='120'>" +eXieB+"地格: " + earthGe + " " + earthCol + 
-							                                      get3CaiWuXing(earthGe) + 
-                             "<td width='60'>" +threeCaiOut+ "</td>" + 
-							 " </td><td width='90' class='outge'>外格: "+ 
-			                + outGe + " </td><td width='90'>总格: "+allGe + "</td></tr>");
-			   }
-			   
-	   }
-       document.write("</table>");
-} // end function
+                    return true;
+                }
+            }
 
 
-//次吉祥数
-function showCiGoodFunction()
-{
-     //吉祥数
-   for(i=0;i<81;i++){
-//      document.write("x= "+i + "&nbsp;");
-	    
-		//检测人格 = x + 19
-		var x = i+1;
-		var tpersonGe = (i+1) + g_xingNum;
-		
-       if(checkGoodNum(i, cijixiangNum)){
+            return false;
+        }
 
-		document.write("x=" + (i+1));
-		
+        //根据五行数返回五行颜色
+        function getWuXingColor(nary) {
+            var skyColor = get3CaiWuXing(nary);
+            var size = "5";
+            var skyCol = "<font color='#000000'>";
+            if (skyColor == "水")
+                skyCol = "<font color='#87CEFF' size='" + size + "'>";
+            else
+            if (skyColor == "木")
+                skyCol = "<font color='#7CFC00' size='" + size + "'>";
+            else
+            if (skyColor == "火")
+                skyCol = "<font color='#ff0000' size='" + size + "'>";
+            else
+            if (skyColor == "土")
+                skyCol = "<font color='#CD853F' size='" + size + "'>";
+            else
+            if (skyColor == "金")
+                skyCol = "<font color='#FFC125' size='" + size + "'>";
+            else
+                skyCol = "<font color='#000000' size='" + size + "'>";
+            return skyCol;
+        }
 
-	   if(checkGoodNum(tpersonGe, cijixiangNum))
-	   {
-		   //document.write(" 人格: " +tpersonGe + "&nbsp;");
 
-		   // y + 1 = 吉祥数
-		  // document.write("y= ");
-		   for(var j=0; j<cijixiangNum.length; j++){
-               var outGe = j + 1;  //外格= y + 1
-			   if(j==0)continue;
-			   if(checkGoodNum(outGe, cijixiangNum)){
-			      //document.write(j + " " + outGe, "&nbsp;");
+        //判断阴阳数
+        function calcYinYangNum(nary) {
+            var t = nary % 10;
+            if (t == 1 || t == 3 || t == 5 || t == 7 || t == 9)
+                return "阳";
+            else
+            if (t == 2 || t == 4 || t == 6 || t == 8 || t == 0)
+                return "阴";
+            else
+            if (t < 0)
+                return "计算错误 function calcYinYangNum(nary)";
+            return "计算错误 function calcYinYangNum(nary)";
+        }
 
-				  //地格 = x + y
-				  var earthGe = j + x;
-				  if(checkGoodNum(earthGe, cijixiangNum)){
-						//document.write(j + " " + earthGe, "&nbsp;");
+        //计算是否斜体
+        function calcXieTi(nary) {
+            var xieTi = calcYinYangNum(nary);
+            var xieB = " ";
+            if (xieTi == "阴")
+                xieB = "<i>";
+            else
+                xieB = "<b>";
+            return xieB;
+        }
 
-						//总格 = x + y + 姓
-						var allGe = earthGe + g_xingNum;
+        //判断是否在大吉数组内
+        //tcai - 输出的三才，木火土、金水水等
+        function checkIsNotInBigGood(nary, tcai) {
+            for (var i = 0; i < nary.length; i++) {
+                if (nary[i] == tcai)
+                    return true;
+            }
+            return false;
+        }
 
-						var outStr = "<br> y=" + j + 
-						             "  天格: " + (g_xingNum+1) +
-									 "  人格: " + tpersonGe +  
-									 " 地格: " + earthGe + 
-						             " 外格: " + outGe +									 
-									 " 总格: " + allGe + "&nbsp;";
+        //判断是否在中吉数组内
+        //tcai - 三才，土火金类似的。
+        function checkIsNotInMidGood(nary, tcai) {
+            for (var i = 0; i < nary.length; i++) {
+                if (nary[i] == tcai)
+                    return true;
+            }
+            return false;
+        }
 
-						if(checkGoodNum(allGe, cijixiangNum)){
-							document.write(outStr);
-						}
-				  }
-			   }
-		   }
-		   document.write("<br>"); 
-	   }
-	    document.write("<br>"); 
-   }
-  }
-}
+        //男的2
+        //nary - 吉祥数、次吉祥数数组
+        function showMan2Function(nary) {
+            var MAXI = 30;
+            document.write("<table border='1'>");
+            var hang = 0;
+            for (var x = 1; x <= MAXI; x++) {
+                //document.write("x=" + x + "<br>");
+                document.write("<tr>");
 
-//计算三才: 天格、地格、人格五行
-//12 木
-//34 火
-//56 土
-//78 金
-//910 水
-function get3CaiWuXing(nary)
-{
-	var t = nary % 10;
-	if(t == 1 || t == 2)
-	   return "木";
-	else
-    if(t == 3 || t == 4)
-	   return "火";
-	else
-	if(t == 5 || t == 6)
-	   return "土";
-	else
-	if(t == 7 || t == 8)
-	  return "金";
-	else
-	if(t == 9 || t == 0)
-	  return "水";
-	else
-	if(t < 0)
-	  return "计算错误 function get3CaiWuXing()";
-	return "错误 function get3CaiWuXing";
-} // end function
+                for (var y = 1; y <= MAXI; y++) {
+
+
+                    //人格 = 姓+x
+                    //外格 = y + 1
+                    //地格 = x + y
+                    //总格 = x+y+姓
+                    var personGe = g_xingNum + x;
+                    var outGe = y + 1;
+                    var earthGe = x + y;
+                    var allGe = x + y + g_xingNum;
+
+                    if (g_jingJian) {
+                        if (checkGoodNum(personGe, nary) &&
+                            checkGoodNum(earthGe, nary)
+                        ) {
+
+                            //天格五行，根据五行改变颜色
+                            //var skyColor = get3CaiWuXing(g_xingNum+1); 
+                            var skyCol = getWuXingColor(g_xingNum + 1);
+                            var peopleCol = getWuXingColor(personGe);
+                            var earthCol = getWuXingColor(earthGe);
+
+
+                            //判断阴阳，若阴则斜体显示
+                            var xieB = calcXieTi(g_xingNum + 1);
+                            var pXieB = calcXieTi(personGe);
+                            var eXieB = calcXieTi(earthGe);
+
+                            //判断三才配置
+                            var threeCaiFlag = get3CaiWuXing(g_xingNum + 1) + get3CaiWuXing(personGe) + get3CaiWuXing(earthGe);
+                            var threeCaiOut = "  ";
+                            if (checkIsNotInBigGood(BigGood, threeCaiFlag))
+                                threeCaiOut = "大吉";
+                            else {
+                                threeCaiOut = " ";
+                                if (checkIsNotInMidGood(MidGood, threeCaiFlag))
+                                    threeCaiOut = "中吉";
+                                else {
+                                    threeCaiOut = " ";
+
+                                    if (threeCaiFlag == "木土土" || threeCaiFlag == "金水土")
+                                        threeCaiOut = "吉";
+                                    else
+                                        threeCaiOut = " ";
+                                }
+                            }
 
 
 
-//计算函数
-function myFunction()
-{
-   var huanHang = "<br><br>";
-   
-   //获取数据
-   g_xingNum = document.getElementById("ixing").value;
-   g_xingNum = parseInt(g_xingNum);
 
-   //获取中字x
-   g_midword = document.getElementById("midword").value;
-   
-   //获取多选项
-   g_jingJian = document.getElementById("diyaoqiu").checked;
-   
-   //获取男女
-   g_man = document.getElementById("man").checked;
-   //g_woman = document.getElementById("woman").checked;
+                            document.write("<td width='73'>x = " + x + "</td><td width='73'>y = " + y +
+                                " </td><td width='120'>" + xieB + "天格: " + (g_xingNum + 1) + " " + skyCol +
+                                get3CaiWuXing(g_xingNum + 1) + "</font>" +
+                                " </td><td width='120'>" + pXieB + "人格: " + personGe + " " + peopleCol +
+                                get3CaiWuXing(personGe) + "</font>" +
+                                " <td width='120'>" + eXieB + "地格: " + earthGe + " " + earthCol +
+                                get3CaiWuXing(earthGe) + "</font>" +
+                                " <td width='60'>" + threeCaiOut + "</td>" +
+                                " </td><td width='90' class='outge'>外格: " +
+                                +outGe + " </td><td width='90'>总格: " + allGe + " " + get3CaiWuXing(allGe) + "</td></tr>");
+                            //document.write("</td>");
+                        }
+                    } else {
+                        if (checkGoodNum(personGe, nary) &&
+                            checkGoodNum(outGe, nary) &&
+                            checkGoodNum(earthGe, nary) &&
+                            checkGoodNum(allGe, nary)) {
 
-   //-------------------------------------------------------------
-   document.write("<link type='text/css' href='yangshi.css' rel='stylesheet' />");
-   document.write("<body>");
-   //输出
-   var midHave = false;
-   if(g_midword.length == 0){
-	   //document.write("空值");
-	   midHave = false;
-   }
-   else{
-	   g_midword = parseInt(g_midword);
-	   midHave = true;
-	   //document.write("无任何对象");
-   }
-   
-   document.write("姓笔画: " + g_xingNum + huanHang);
-   document.write("中字笔画: " + g_midword + huanHang);
-   //document.write("<br>" + g_jingJian);
-  
-   
-   //-----------------------------------------------------
-   //输出结果
-   if(midHave){
-      document.write("<br>———男的——————————<br>");
-      showMidwordFunction(g_midword, goodNum);
-
-	  document.write("<br>———女的——————————<br>");
-	   showMidwordFunction(g_midword, womanNum);
-	   
-	   document.write("<br>———女的优——————————<br>");
-	   showMidwordFunction(g_midword, womanNumComNum);
-   }
-   else{
-   //-------------------------------
-   //--------输出
-       if(g_man){
-	   document.write("<br>———男的——————————<br>");
-	   showMan2Function(goodNum);
-	   }else{
-	   document.write("<br>———女的——————————<br>");
-	   showMan2Function(womanNum);
-	   
-	   document.write("<br>———女的优——————————<br>");
-	   showMan2Function(womanNumComNum);
-	   }
-   }
-   
+                            //天格五行，根据五行改变颜色
+                            //var skyColor = get3CaiWuXing(g_xingNum+1); 
+                            var skyCol = getWuXingColor(g_xingNum + 1);
+                            var peopleCol = getWuXingColor(personGe);
+                            var earthCol = getWuXingColor(earthGe);
 
 
-   var retstr = "<input type='button' value='返回' onclick='location.reload()'>";
-   document.write(retstr);
-   document.write("</body>");
-}
+                            //判断阴阳，若阴则斜体显示
+                            var xieB = calcXieTi(g_xingNum + 1);
+                            var pXieB = calcXieTi(personGe);
+                            var eXieB = calcXieTi(earthGe);
 
-</script>
+                            //判断三才配置
+                            var threeCaiFlag = get3CaiWuXing(g_xingNum + 1) + get3CaiWuXing(personGe) + get3CaiWuXing(earthGe);
+                            var threeCaiOut = "  ";
+                            if (checkIsNotInBigGood(BigGood, threeCaiFlag))
+                                threeCaiOut = "大吉";
+                            else {
+                                threeCaiOut = " ";
+                                if (checkIsNotInMidGood(MidGood, threeCaiFlag))
+                                    threeCaiOut = "中吉";
+                                else {
+                                    threeCaiOut = " ";
+
+                                    if (threeCaiFlag == "木土土" || threeCaiFlag == "金水土")
+                                        threeCaiOut = "吉";
+                                    else
+                                        threeCaiOut = " ";
+                                }
+                            }
+
+
+
+
+                            document.write("<td width='73'>x = " + x + "</td><td width='73'>y = " + y +
+                                " </td><td width='120'>" + xieB + "天格: " + (g_xingNum + 1) + " " + skyCol +
+                                get3CaiWuXing(g_xingNum + 1) + "</font>" +
+                                " </td><td width='120'>" + pXieB + "人格: " + personGe + " " + peopleCol +
+                                get3CaiWuXing(personGe) + "</font>" +
+                                " <td width='120'>" + eXieB + "地格: " + earthGe + " " + earthCol +
+                                get3CaiWuXing(earthGe) + "</font>" +
+                                " <td width='60'>" + threeCaiOut + "</td>" +
+                                " </td><td width='90' class='outge'>外格: " +
+                                +outGe + " </td><td width='90'>总格: " + allGe + " " + get3CaiWuXing(allGe) + "</td></tr>");
+                            //document.write("</td>");
+                        }
+
+
+                    }
+
+                    //document.write("<br>");
+                }
+            }
+            document.write("</table>");
+        } // end function
+
+        //中间字定制版
+        //nary - 数组
+        //nx - 定制中字的笔画数
+        function showMidwordFunction(nx, nary) {
+            var MAXI = 30;
+            //document.write(nx);
+            //document.write("x=" + x + "<br>");
+            document.write("<table border='1'>");
+            for (var y = 1; y <= MAXI; y++) {
+
+                document.write("<tr>");
+
+                var personGe = g_xingNum + nx; //人格 = 姓氏 + nx
+                var outGe = y + 1;
+                var earthGe = nx + y;
+                var allGe = nx + y + g_xingNum;
+
+                //document.write(personGe + "<br>");
+
+                //		    checkGoodNum(personGe, nary) &&
+
+                if (
+                    checkGoodNum(outGe, nary) &&
+                    checkGoodNum(earthGe, nary) &&
+                    checkGoodNum(allGe, nary)) {
+
+                    var skyCol = getWuXingColor(g_xingNum + 1);
+                    var peopleCol = getWuXingColor(personGe);
+                    var earthCol = getWuXingColor(earthGe);
+
+                    //判断阴阳，若阴则斜体显示
+                    var xieB = calcXieTi(g_xingNum + 1);
+                    var pXieB = calcXieTi(personGe);
+                    var eXieB = calcXieTi(earthGe);
+
+                    //判断三才配置
+                    var threeCaiFlag = get3CaiWuXing(g_xingNum + 1) + get3CaiWuXing(personGe) + get3CaiWuXing(earthGe);
+                    var threeCaiOut = "  ";
+                    if (checkIsNotInBigGood(BigGood, threeCaiFlag))
+                        threeCaiOut = "大吉";
+                    else {
+                        threeCaiOut = " ";
+                        if (checkIsNotInMidGood(MidGood, threeCaiFlag))
+                            threeCaiOut = "中吉";
+                        else
+                            threeCaiOut = " ";
+                    }
+
+                    document.write("<td width='73'>y = " + y +
+                        " </td><td width='120'>" + xieB + "天格: " + (g_xingNum + 1) + " " + skyCol +
+                        get3CaiWuXing(g_xingNum + 1) +
+                        " </td><td width='120'>" + pXieB + "人格: " + personGe + " " + peopleCol +
+                        get3CaiWuXing(personGe) +
+                        " <td width='120'>" + eXieB + "地格: " + earthGe + " " + earthCol +
+                        get3CaiWuXing(earthGe) +
+                        "<td width='60'>" + threeCaiOut + "</td>" +
+                        " </td><td width='90' class='outge'>外格: " +
+                        +outGe + " </td><td width='90'>总格: " + allGe + "</td></tr>");
+                }
+
+            }
+            document.write("</table>");
+        } // end function
+
+
+        //次吉祥数
+        function showCiGoodFunction() {
+            //吉祥数
+            for (i = 0; i < 81; i++) {
+                //      document.write("x= "+i + "&nbsp;");
+
+                //检测人格 = x + 19
+                var x = i + 1;
+                var tpersonGe = (i + 1) + g_xingNum;
+
+                if (checkGoodNum(i, cijixiangNum)) {
+
+                    document.write("x=" + (i + 1));
+
+
+                    if (checkGoodNum(tpersonGe, cijixiangNum)) {
+                        //document.write(" 人格: " +tpersonGe + "&nbsp;");
+
+                        // y + 1 = 吉祥数
+                        // document.write("y= ");
+                        for (var j = 0; j < cijixiangNum.length; j++) {
+                            var outGe = j + 1; //外格= y + 1
+                            if (j == 0) continue;
+                            if (checkGoodNum(outGe, cijixiangNum)) {
+                                //document.write(j + " " + outGe, "&nbsp;");
+
+                                //地格 = x + y
+                                var earthGe = j + x;
+                                if (checkGoodNum(earthGe, cijixiangNum)) {
+                                    //document.write(j + " " + earthGe, "&nbsp;");
+
+                                    //总格 = x + y + 姓
+                                    var allGe = earthGe + g_xingNum;
+
+                                    var outStr = "<br> y=" + j +
+                                        "  天格: " + (g_xingNum + 1) +
+                                        "  人格: " + tpersonGe +
+                                        " 地格: " + earthGe +
+                                        " 外格: " + outGe +
+                                        " 总格: " + allGe + "&nbsp;";
+
+                                    if (checkGoodNum(allGe, cijixiangNum)) {
+                                        document.write(outStr);
+                                    }
+                                }
+                            }
+                        }
+                        document.write("<br>");
+                    }
+                    document.write("<br>");
+                }
+            }
+        }
+
+        //计算三才: 天格、地格、人格五行
+        //12 木
+        //34 火
+        //56 土
+        //78 金
+        //910 水
+        function get3CaiWuXing(nary) {
+            var t = nary % 10;
+            if (t == 1 || t == 2)
+                return "木";
+            else
+            if (t == 3 || t == 4)
+                return "火";
+            else
+            if (t == 5 || t == 6)
+                return "土";
+            else
+            if (t == 7 || t == 8)
+                return "金";
+            else
+            if (t == 9 || t == 0)
+                return "水";
+            else
+            if (t < 0)
+                return "计算错误 function get3CaiWuXing()";
+            return "错误 function get3CaiWuXing";
+        } // end function
+
+
+
+        //计算函数
+        function myFunction() {
+            var huanHang = "<br><br>";
+
+            //获取数据
+            g_xingNum = document.getElementById("ixing").value;
+            g_xingNum = parseInt(g_xingNum);
+
+            //获取中字x
+            g_midword = document.getElementById("midword").value;
+
+            //获取多选项
+            g_jingJian = document.getElementById("diyaoqiu").checked;
+
+            //获取男女
+            g_man = document.getElementById("man").checked;
+            //g_woman = document.getElementById("woman").checked;
+
+            //-------------------------------------------------------------
+            document.write("<link type='text/css' href='yangshi.css' rel='stylesheet' />");
+            document.write("<body>");
+            //输出
+            var midHave = false;
+            if (g_midword.length == 0) {
+                //document.write("空值");
+                midHave = false;
+            } else {
+                g_midword = parseInt(g_midword);
+                midHave = true;
+                //document.write("无任何对象");
+            }
+
+            document.write("姓笔画: " + g_xingNum + huanHang);
+            document.write("中字笔画: " + g_midword + huanHang);
+            //document.write("<br>" + g_jingJian);
+
+
+            //-----------------------------------------------------
+            //输出结果
+            if (midHave) {
+                document.write("<br>———男的——————————<br>");
+                showMidwordFunction(g_midword, goodNum);
+
+                document.write("<br>———女的——————————<br>");
+                showMidwordFunction(g_midword, womanNum);
+
+                document.write("<br>———女的优——————————<br>");
+                showMidwordFunction(g_midword, womanNumComNum);
+            } else {
+                //-------------------------------
+                //--------输出
+                if (g_man) {
+                    document.write("<br>———男的——————————<br>");
+                    showMan2Function(goodNum);
+                } else {
+                    document.write("<br>———女的——————————<br>");
+                    showMan2Function(womanNum);
+
+                    document.write("<br>———女的优——————————<br>");
+                    showMan2Function(womanNumComNum);
+                }
+            }
+
+
+
+            var retstr = "<input type='button' value='返回' onclick='location.reload()'>";
+            document.write(retstr);
+            document.write("</body>");
+        }
+    </script>
 </head>
+
 <body>
-<center>
-姓笔画:<input type="text" id='ixing' name='ixing' value='19'>
-  
-  <input type="button" value="计算" onclick="myFunction()"><br><br>
-  中字笔画:<input type="text" id='midword' name='midword'>
+    <center>
+        姓笔画:<input type="text" id='ixing' name='ixing' value='19'>
 
-  <input type="checkbox" id='diyaoqiu' name='diyaoqiu' value='低要求'/>低要求 
-  <input type="checkbox" id='man' name='man' value='男' checked='true'/>男
+        <input type="button" value="计算" onclick="myFunction()"><br><br> 中字笔画:
+        <input type="text" id='midword' name='midword'>
 
-</center>
+        <input type="checkbox" id='diyaoqiu' name='diyaoqiu' value='低要求' />低要求
+        <input type="checkbox" id='man' name='man' value='男' checked='true' />男
+
+    </center>
 </body>
+
 </html>
